@@ -2,14 +2,384 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #000000;
-  color: #F5F5F5;
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --orange: #FF6B1A;
+  --orange-glow: rgba(255, 107, 26, 0.4);
+  --orange-soft: rgba(255, 107, 26, 0.15);
+  --blue-deep: #020B18;
+  --blue-dark: #040F1E;
+  --blue-mid: #071830;
+  --blue-panel: #0A1F3A;
+  --blue-border: #0D2847;
+  --blue-highlight: #1A4A7A;
+  --gold: #C9A84C;
+  --gold-glow: rgba(201, 168, 76, 0.3);
+  --text-primary: #F0F4FF;
+  --text-secondary: #8BA4C8;
 }
 
-/* Custom background geometry */
-.grid-beams {
-  background-image: linear-gradient(rgba(255, 153, 51, 0.05) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 153, 51, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--blue-deep);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animated star field background */
+.starfield {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 107, 26, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(26, 74, 122, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(7, 24, 48, 0.8) 0%, transparent 70%),
+    var(--blue-deep);
+  z-index: 0;
+}
+
+.starfield::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 75%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 33% 55%, rgba(255, 107, 26, 0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 66% 88%, rgba(255, 107, 26, 0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(201, 168, 76, 0.5) 0%, transparent 100%);
+}
+
+/* Horizontal scan line effect */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grid beam overlay */
+.grid-lines {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 107, 26, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 26, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Orange glow utilities */
+.glow-orange {
+  box-shadow: 0 0 30px var(--orange-glow), 0 0 60px rgba(255, 107, 26, 0.15);
+}
+
+.glow-orange-sm {
+  box-shadow: 0 0 15px var(--orange-glow);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.text-glow-orange {
+  text-shadow: 0 0 20px var(--orange-glow), 0 0 40px rgba(255, 107, 26, 0.2);
+}
+
+.text-glow-gold {
+  text-shadow: 0 0 15px var(--gold-glow);
+}
+
+/* Panel styles */
+.panel {
+  background: var(--blue-panel);
+  border: 1px solid var(--blue-border);
+}
+
+.panel-dark {
+  background: var(--blue-dark);
+  border: 1px solid var(--blue-border);
+}
+
+/* Category header */
+.category-header {
+  background: linear-gradient(180deg, #0D2847 0%, #071830 100%);
+  border-bottom: 3px solid var(--orange);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  opacity: 0.6;
+}
+
+/* Clue cell button */
+.clue-cell {
+  background: linear-gradient(135deg, #071830 0%, #0A1F3A 100%);
+  border: 1px solid #0D2847;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clue-cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 107, 26, 0.0) 0%, rgba(255, 107, 26, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.clue-cell:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.clue-cell:hover:not(:disabled) {
+  border-color: var(--orange);
+  transform: scale(1.03);
+  box-shadow: 0 0 25px var(--orange-glow), inset 0 0 20px rgba(255, 107, 26, 0.05);
+}
+
+.clue-cell:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Score panel */
+.score-card {
+  background: linear-gradient(180deg, #0A1F3A 0%, #071830 100%);
+  border: 1px solid #0D2847;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-card.active {
+  border-color: var(--orange);
+  box-shadow: 0 0 20px var(--orange-glow), inset 0 0 20px rgba(255, 107, 26, 0.05);
+}
+
+.score-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+}
+
+/* Number display */
+.score-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Daily Double animation */
+@keyframes ddPulse {
+  0%, 100% { text-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(201, 168, 76, 0.2); }
+  50% { text-shadow: 0 0 40px rgba(201, 168, 76, 0.6), 0 0 80px rgba(201, 168, 76, 0.3); }
+}
+
+.dd-pulse {
+  animation: ddPulse 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, var(--gold) 0%, #F5E08A 40%, var(--gold) 60%, #A07830 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Victory crown animation */
+@keyframes crownFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.crown-float {
+  animation: crownFloat 3s ease-in-out infinite;
+}
+
+/* Input field */
+.wager-input {
+  background: var(--blue-mid);
+  border: 2px solid var(--blue-highlight);
+  color: var(--text-primary);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.wager-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+/* Button base */
+.btn-primary {
+  background: linear-gradient(135deg, var(--orange) 0%, #E55A10 100%);
+  color: white;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px var(--orange-glow);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--blue-highlight);
+  color: var(--text-secondary);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: var(--orange-soft);
+}
+
+/* Separator line */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue-highlight), transparent);
+}
+
+/* Correct/incorrect button */
+.btn-correct {
+  background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+  border: 1px solid #22c55e;
+  color: white;
+  transition: all 0.2s ease;
+}
+.btn-correct:hover {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-incorrect {
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+  border: 1px solid #ef4444;
+  color: white;
+  transition: all 0.2s ease;
+}
+.btn-incorrect:hover {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-skip {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 1px solid #475569;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+.btn-skip:hover {
+  border-color: #64748b;
+  color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+/* Team color indicator dots */
+.team-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--blue-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--blue-highlight);
+  border-radius: 2px;
+}
+
+/* Pulsing ring for active team */
+@keyframes ring-pulse {
+  0% { box-shadow: 0 0 0 0 var(--orange-glow); }
+  70% { box-shadow: 0 0 0 8px rgba(255,107,26,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,107,26,0); }
+}
+
+.ring-pulse {
+  animation: ring-pulse 2s ease-out infinite;
+}
+
+/* Responsive scaling */
+@media (max-height: 700px) {
+  .clue-value {
+    font-size: 1.5rem;
+  }
 }
