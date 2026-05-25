@@ -48,11 +48,16 @@ export default function App() {
     if (!currentQuestion) return;
     sfx.correct();
     setTeams((prev) =>
-      prev.map((t, i) => i === activeTeamIndex ? { ...t, score: t.score + currentQuestion.points } : t)
+      prev.map((t, i) => (i === activeTeamIndex ? { ...t, score: t.score + currentQuestion.points } : t))
     );
     setHistory((h) => [
       ...h,
-      { type: "score", teamId: teams[activeTeamIndex].id, delta: currentQuestion.points, questionId: currentQuestion.id }
+      {
+        type: "score",
+        teamId: teams[activeTeamIndex].id,
+        delta: currentQuestion.points,
+        questionId: currentQuestion.id
+      }
     ]);
     if (currentQuestion.points === 500) confetti({ particleCount: 180, spread: 90 });
     markUsed(currentQuestion.id);
@@ -84,9 +89,9 @@ export default function App() {
 
   const onManualScore = (teamId: number, score: number) => {
     setTeams((prev) => {
-      const t = prev.find((x) => x.id === teamId);
-      if (!t) return prev;
-      setHistory((h) => [...h, { type: "manual-score", teamId, oldScore: t.score, newScore: score }]);
+      const team = prev.find((x) => x.id === teamId);
+      if (!team) return prev;
+      setHistory((h) => [...h, { type: "manual-score", teamId, oldScore: team.score, newScore: score }]);
       return prev.map((x) => (x.id === teamId ? { ...x, score } : x));
     });
   };
@@ -130,7 +135,12 @@ export default function App() {
       {phase === "board" && (
         <div className="layout">
           <GameBoard categories={categories} questions={questions} onPick={pickQuestion} />
-          <ControlPanel teams={teams} onManualScore={onManualScore} onUndo={onUndo} onFinish={() => setPhase("final")} />
+          <ControlPanel
+            teams={teams}
+            onManualScore={onManualScore}
+            onUndo={onUndo}
+            onFinish={() => setPhase("final")}
+          />
         </div>
       )}
 
