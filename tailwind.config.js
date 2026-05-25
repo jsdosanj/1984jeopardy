@@ -6,19 +6,31 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        kesri: '#FF9933',   // Saffron Orange
-        gold: '#D4AF37',    // Metallic Premium Gold
-        darkGray: '#121212',
-      },
       fontFamily: {
-        cinzel: ['Cinzel', 'serif'],
-        poppins: ['Poppins', 'sans-serif'],
+        cinzel: ['Cinzel', 'Cinzel Decorative', 'serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        orange: {
+          DEFAULT: '#FF6B1A',
+          soft: 'rgba(255,107,26,0.15)',
+        },
+        gold: {
+          DEFAULT: '#C9A84C',
+        },
+        blue: {
+          deep: '#020B18',
+          dark: '#040F1E',
+          mid: '#071830',
+          panel: '#0A1F3A',
+          border: '#0D2847',
+          highlight: '#1A4A7A',
+        },
       },
       boxShadow: {
-        'kesri-glow': '0 0 25px rgba(255, 153, 51, 0.35)',
-        'gold-glow': '0 0 20px rgba(212, 175, 55, 0.2)',
-      }
+        'orange-glow': '0 0 30px rgba(255,107,26,0.4), 0 0 60px rgba(255,107,26,0.15)',
+        'gold-glow': '0 0 20px rgba(201,168,76,0.3)',
+      },
     },
   },
   plugins: [],
