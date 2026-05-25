@@ -1,33 +1,31 @@
-export interface Clue {
-  q: string;
-  a: string;
-}
-
-export interface Category {
-  name: string;
-  clues: Clue[];
-}
-
-export interface Team {
+export type Team = {
   id: number;
   name: string;
   score: number;
-  color: string;
-}
+};
 
-export interface ActiveClue {
-  categoryName: string;
-  categoryIdx: number;
-  clueIdx: number;
+export type Question = {
+  category: string;
   points: number;
-  question: string;
+  clue: string;
   answer: string;
-  isDailyDouble: boolean;
-}
+  used: boolean;
+  id: string;
+};
 
-export type GameState = 'setup' | 'board' | 'clue' | 'victory';
+export type GamePhase =
+  | "intro"
+  | "teamSetup"
+  | "rules"
+  | "progress1"
+  | "progress2"
+  | "progress3"
+  | "board"
+  | "question"
+  | "final"
+  | "printable";
 
-export interface GameConfig {
-  numTeams: number;
-  teamNames: string[];
-}
+export type ActionLog =
+  | { type: "score"; teamId: number; delta: number; questionId: string }
+  | { type: "used"; questionId: string }
+  | { type: "manual-score"; teamId: number; oldScore: number; newScore: number };
