@@ -13,7 +13,9 @@ const tone = (freq: number, ms = 120, type: OscillatorType = "sine") => {
 };
 
 export const sfx = {
-  select: () => tone(520, 90, "triangle"),
+  select: () => {
+    tone(520, 90, "triangle");
+  },
   correct: () => {
     tone(660, 120, "sine");
     setTimeout(() => tone(880, 180, "sine"), 120);
@@ -21,5 +23,9 @@ export const sfx = {
   wrong: () => {
     tone(320, 120, "square");
     setTimeout(() => tone(220, 180, "square"), 120);
+  },
+  coinFlip: () => {
+    tone(740, 80, "triangle");
+    setTimeout(() => tone(980, 120, "triangle"), 90);
   }
 };
